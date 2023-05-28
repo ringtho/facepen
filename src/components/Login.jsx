@@ -8,8 +8,6 @@ import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [user, setUser] = useState([])
-  const [profile, setProfile] = useState([])
-
   const navigate = useNavigate()
 
   const loginGoogle = useGoogleLogin({
@@ -28,7 +26,6 @@ const Login = () => {
                     }
                 })
                 .then((res) => {
-                    setProfile(res.data)
                     localStorage.setItem('user', JSON.stringify(res.data))
                     const { id, name, picture} = res.data
                     const doc = {
@@ -45,7 +42,7 @@ const Login = () => {
                 .catch((err) => console.log(err))
         }
     },
-    [ user ]
+    [ user, navigate ]
   )
   
   return (
