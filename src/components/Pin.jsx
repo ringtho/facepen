@@ -9,15 +9,12 @@ import { fetchUser } from '../utils/fetchUser'
 
 const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
   const [postHovered, setPostHovered] = useState(false)
-  const [savingPost, setSavingPost] = useState(false)
   const navigate = useNavigate()
   const userInfo = fetchUser()
   const alreadySaved = !!(save?.filter((item) => item.postedBy._id === userInfo.id))?.length
-  console.log(alreadySaved)
 
   const savePin = (id) => {
     if (!alreadySaved) {
-        setSavingPost(true)
         client
         .patch(id)
         .setIfMissing({ save: []})
@@ -32,13 +29,12 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
         .commit()
         .then(() => {
             window.location.reload()
-            setSavingPost(false)
         })
     }
   }
 
   return (
-    <div className='m-2 border-black border-2'>
+    <div className='m-2'>
         <div
             onMouseEnter={() => setPostHovered(true)}
             onMouseLeave={() => setPostHovered(false)}
