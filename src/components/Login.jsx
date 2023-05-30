@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import shareVideo from '../assets/share.mp4'
-import logo from '../assets/logowhite.png'
+// import logo from '../assets/logowhite.png'
+import logo from '../assets/facepen/png/logo.png'
 import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
 import { client } from '../client'
