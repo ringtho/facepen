@@ -11,7 +11,7 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
   const [postHovered, setPostHovered] = useState(false)
   const navigate = useNavigate()
   const userInfo = fetchUser()
-  const alreadySaved = !!(save?.filter((item) => item.postedBy._id === userInfo?.id))?.length
+  const alreadySaved = !!(save?.filter((item) => item?.postedBy?._id === userInfo?.id))?.length
 
   const savePin = (id) => {
     if (!alreadySaved) {
