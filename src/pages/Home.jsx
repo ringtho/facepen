@@ -51,7 +51,7 @@ const Home = () => {
           </div>
           <Sidebar user={user && user} closeToggle={setToggleSideBar} />
         </div>
-      )}
+        )}
       </div>
       
       <div className='pb-2 flex-1 h-screen overflow-y-scroll' ref={scrollRef}>
