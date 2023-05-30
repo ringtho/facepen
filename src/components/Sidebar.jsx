@@ -3,6 +3,7 @@ import { NavLink, Link } from 'react-router-dom'
 import { RiHomeFill } from 'react-icons/ri'
 import { IoIosArrowForward } from 'react-icons/io'
 import logo from '../assets/logo.png'
+import { categories } from '../utils/data'
 
 const sideBar = ({user, closeToggle}) => {
   const handleCloseSidebar = () => {
@@ -12,13 +13,7 @@ const sideBar = ({user, closeToggle}) => {
   }
   const isActiveStyle = 'flex items-center px-5 font-extrabold border-r-2 border-black transition-all duration-200 ease-in-out capitalize'
   const isNotActiveStyle = 'flex items-center px-5 text-gray-500 hover:text-black transition-all duration-200 ease-in-out capitalize'
-  const categories = [
-    {name: 'Animals'},
-    {name: 'WallPapers'},
-    {name: 'Photography'},
-    {name: 'Gaming'},
-    {name: 'Coding'}
-  ]
+ 
   return (
     <div className='flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-210 hide-scrollbar'>
       <div className='flex flex-col'>
@@ -52,6 +47,11 @@ const sideBar = ({user, closeToggle}) => {
                 onClick={handleCloseSidebar}
                 key={category.name}  
               >
+                <img 
+                  src={category.image}
+                  alt='category-pic'
+                  className='w-8 h-8 rounded-full mr-2 shadow-sm'
+                />
                 {category.name}
               </NavLink>
             )
