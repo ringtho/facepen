@@ -7,7 +7,7 @@ import { client, urlFor } from '../client'
 import MasonryLayout from '../components/MasonryLayout'
 import { pinDetailMorePinQuery, pinDetailQuery } from '../utils/data'
 import Spinner from './Spinner'
-
+import PropTypes from 'prop-types'
 
 const PinDetail = ({ user }) => {
   const [pins, setPins] = useState(null)
@@ -20,15 +20,15 @@ const PinDetail = ({ user }) => {
     let query = pinDetailQuery(pinId)
     if (query) {
       client.fetch(query)
-      .then ((data) => {
-        setPinDetail(data[0])
-        if (data[0]) {
-          query = pinDetailMorePinQuery(data[0])
+        .then((data) => {
+          setPinDetail(data[0])
+          if (data[0]) {
+            query = pinDetailMorePinQuery(data[0])
 
-          client.fetch(query)
-          .then(res => setPins(res))
-        }
-      })
+            client.fetch(query)
+              .then(res => setPins(res))
+          }
+        })
     }
   }
 
@@ -37,41 +37,41 @@ const PinDetail = ({ user }) => {
   }, [pinId])
 
   const addComment = () => {
-    if(comment) {
+    if (comment) {
       setAddingComment(true)
 
       client
-      .patch(pinId)
-      .setIfMissing({ comments: []})
-      .insert('after', 'comments[-1]', [{
-        comment,
-        _key: uuidv4(),
-        postedBy: {
-          _type: 'postedBy',
-          _ref: user._id
-        }
-      }])
-      .commit()
-      .then(() => {
-        fetchPinDetails()
-        setComment('')
-        setAddingComment(false)
-      })
+        .patch(pinId)
+        .setIfMissing({ comments: [] })
+        .insert('after', 'comments[-1]', [{
+          comment,
+          _key: uuidv4(),
+          postedBy: {
+            _type: 'postedBy',
+            _ref: user._id
+          }
+        }])
+        .commit()
+        .then(() => {
+          fetchPinDetails()
+          setComment('')
+          setAddingComment(false)
+        })
     }
   }
 
-  if(!pinDetail) return <Spinner message="Loading pin..." />
+  if (!pinDetail) return <Spinner message="Loading pin..." />
 
   return (
     <>
-    <div 
-      className='flex xl:flex-row flex-col m-auto bg-white' 
-      style={{ maxWidth: '1500px', borderRadius: '32px'}}
+    <div
+      className='flex xl:flex-row flex-col m-auto bg-white'
+      style={{ maxWidth: '1500px', borderRadius: '32px' }}
     >
       <div
         className='flex justify-center items-center md:items-start flex-initial'
       >
-        <img 
+        <img
           src={pinDetail?.image && urlFor(pinDetail.image).url()}
           className='rounded-t-3xl rounded-b-lg'
           alt='user-post'
@@ -101,7 +101,7 @@ const PinDetail = ({ user }) => {
           <p className='mt-3'>{pinDetail.about}</p>
         </div>
         <Link to={`/user-profile/${pinDetail.postedBy?._id}`} className="flex gap-2 mt-5 items-center bg-white rounded-lg">
-            <img 
+            <img
                 className='w-8 h-8 rounded-full object-cover'
                 src={pinDetail.postedBy?.image}
                 alt="user-profile"
@@ -112,7 +112,7 @@ const PinDetail = ({ user }) => {
         <div className='max-h-370 overflow-y-auto'>
           {pinDetail?.comments?.map((comment, idx) => (
             <div className='flex gap-2 mt-5 items-center bg-white rounded-lg' key={idx}>
-              <img 
+              <img
                 src={comment.postedBy.image}
                 alt='user-profile'
                 className='w-10 h-10 rounded-full cursor-pointer'
@@ -126,13 +126,13 @@ const PinDetail = ({ user }) => {
         </div>
             <div className='flex flex-wrap mt-6 gap-3'>
               <Link to={`/user-profile/${pinDetail.postedBy?._id}`}>
-                <img 
+                <img
                     className='w-10 h-10 rounded-full cursor-pointer'
                     src={pinDetail.postedBy?.image}
                     alt="user-profile"
                 />
               </Link>
-              <input 
+              <input
                 className='flex-1 border-gray-100 outline-none border-2 p-2 rounded-2xl focus:border-gray-300'
                 type='text'
                 placeholder='Add a comment'
@@ -149,18 +149,24 @@ const PinDetail = ({ user }) => {
             </div>
       </div>
     </div>
-    {pins?.length > 0 ? (
-      <>
-        <h2 className='text-center font-bold text-2xl mt-8 mb-4'>
-          More like this
-        </h2>
-        <MasonryLayout pins={pins} />
-      </>
-    ): (
-      <Spinner message="Loading more pins..." />
-    )}
+    {
+      pins?.length > 0
+        ? (
+            <>
+              <h2 className='text-center font-bold text-2xl mt-8 mb-4'>
+                More like this
+              </h2>
+              <MasonryLayout pins={pins} />
+            </>
+          )
+        : (<Spinner message="Loading more pins..." />)
+    }
     </>
   )
+}
+
+PinDetail.propTypes = {
+  user: PropTypes.object
 }
 
 export default PinDetail

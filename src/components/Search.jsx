@@ -3,26 +3,27 @@ import MasonryLayout from './MasonryLayout'
 import { client } from '../client'
 import { feedQuery, searchQuery } from '../utils/data'
 import Spinner from './Spinner'
+import PropTypes from 'prop-types'
 
 const Search = ({ searchTerm }) => {
   const [pins, setPins] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if(searchTerm) {
+    if (searchTerm) {
       setLoading(true)
       const query = searchQuery(searchTerm.toLowerCase())
       client.fetch(query)
-      .then((data) => {
-        setPins(data)
-        setLoading(false)
-      })
+        .then((data) => {
+          setPins(data)
+          setLoading(false)
+        })
     } else {
       client.fetch(feedQuery)
-      .then((data) => {
-        setLoading(false)
-        setPins(data)
-      })
+        .then((data) => {
+          setLoading(false)
+          setPins(data)
+        })
     }
   }, [searchTerm])
   return (
@@ -34,9 +35,12 @@ const Search = ({ searchTerm }) => {
           No pins found
         </div>
       )}
-       
     </div>
   )
+}
+
+Search.propTypes = {
+  searchTerm: PropTypes.string
 }
 
 export default Search

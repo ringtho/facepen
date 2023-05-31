@@ -9,7 +9,6 @@ import { client } from '../client'
 import logo from '../assets/facepen/png/logo.png'
 import { fetchUser } from '../utils/fetchUser'
 
-
 const Home = () => {
   const [toggleSideBar, setToggleSideBar] = useState(true)
   const [user, setUser] = useState(null)
@@ -53,7 +52,6 @@ const Home = () => {
         </div>
         )}
       </div>
-      
       <div className='pb-2 flex-1 h-screen overflow-y-scroll' ref={scrollRef}>
          <Routes>
             <Route path='/user-profile/:userId' element={<UserProfile />} />

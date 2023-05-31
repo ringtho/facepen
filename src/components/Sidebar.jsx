@@ -4,7 +4,7 @@ import { RiHomeFill } from 'react-icons/ri'
 import logo from '../assets/facepen/png/logo.png'
 import { categories } from '../utils/data'
 
-const sideBar = ({user, closeToggle}) => {
+const sideBar = ({ user, closeToggle }) => {
   const handleCloseSidebar = () => {
     if (closeToggle) {
       closeToggle(false)
@@ -12,19 +12,19 @@ const sideBar = ({user, closeToggle}) => {
   }
   const isActiveStyle = 'flex items-center px-5 font-extrabold border-r-2 border-black transition-all duration-200 ease-in-out capitalize'
   const isNotActiveStyle = 'flex items-center px-5 text-gray-500 hover:text-black transition-all duration-200 ease-in-out capitalize'
- 
+
   return (
     <div className='flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-210 hide-scrollbar'>
       <div className='flex flex-col'>
-        <Link 
-          to='/' 
+        <Link
+          to='/'
           className='flex px-5 gap-2 my-6 pt-1 w-190 items-center'
           onClick={handleCloseSidebar}>
           <img src={logo} alt='logo' className='w-full' />
         </Link>
         <div className='flex flex-col gap-5'>
-          <NavLink 
-            to='/' 
+          <NavLink
+            to='/'
             className={({ isActive }) => (
               isActive ? isActiveStyle : isNotActiveStyle
             )}
@@ -44,9 +44,9 @@ const sideBar = ({user, closeToggle}) => {
                   isActive ? isActiveStyle : isNotActiveStyle
                 )}
                 onClick={handleCloseSidebar}
-                key={category.name}  
+                key={category.name}
               >
-                <img 
+                <img
                   src={category.image}
                   alt='category-pic'
                   className='w-8 h-8 rounded-full mr-2 shadow-sm'

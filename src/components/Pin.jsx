@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
-import { client,  urlFor } from '../client'
-import { MdDownloadForOffline }from 'react-icons/md'
-import { AiTwotoneDelete }from 'react-icons/ai'
-import { BsFillArrowUpRightCircleFill }from 'react-icons/bs'
+import { client, urlFor } from '../client'
+import { MdDownloadForOffline } from 'react-icons/md'
+import { AiTwotoneDelete } from 'react-icons/ai'
+import { BsFillArrowUpRightCircleFill } from 'react-icons/bs'
 import { fetchUser } from '../utils/fetchUser'
+import PropTypes from 'prop-types'
 
-const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
+const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
   const [postHovered, setPostHovered] = useState(false)
   const navigate = useNavigate()
   const userInfo = fetchUser()
@@ -15,30 +16,30 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
 
   const savePin = (id) => {
     if (!alreadySaved) {
-        client
+      client
         .patch(id)
-        .setIfMissing({ save: []})
+        .setIfMissing({ save: [] })
         .insert('after', 'save[-1]', [{
-            _key: uuidv4(),
-            userId: userInfo?.id,
-            postedBy: {
-                _type: 'postedBy',
-                _ref: userInfo?.id
-            }
+          _key: uuidv4(),
+          userId: userInfo?.id,
+          postedBy: {
+            _type: 'postedBy',
+            _ref: userInfo?.id
+          }
         }])
         .commit()
         .then(() => {
-            window.location.reload()
+          window.location.reload()
         })
     }
   }
 
   const deletePin = (id) => {
     client
-    .delete(id)
-    .then(() => {
+      .delete(id)
+      .then(() => {
         window.location.reload()
-    })
+      })
   }
 
   return (
@@ -51,10 +52,10 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
         >
             <img src={urlFor(image).width(250).url()} alt='user-post' className='rounded-lg w-full' />
             {postHovered && (
-                <div 
+                <div
                     className='absolute top-0 w-full h-full flex flex-col justify-between p-1 pr-2 pt-2 pb-2 z-50'
-                    style={{height: '100%'}}
-                > 
+                    style={{ height: '100%' }}
+                >
                     <div className='flex items-center justify-between'>
                         <div className='flex gap-2'>
                             <a
@@ -66,25 +67,29 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
                                 <MdDownloadForOffline />
                             </a>
                         </div>
-                        {alreadySaved ? (
-                            <button
-                                type='button'
-                                className='bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'
-                            >
-                               {save?.length} Saved
-                            </button>
-                        ): (
-                            <button
-                                type='button'
-                                className='bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    savePin(_id)
-                                }}
-                            >
-                                Save
-                            </button>
-                        )}
+                        {
+                          alreadySaved
+                            ? (
+                                <button
+                                    type='button'
+                                    className='bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'
+                                >
+                                {save?.length} Saved
+                                </button>
+                              )
+                            : (
+                                <button
+                                    type='button'
+                                    className='bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      savePin(_id)
+                                    }}
+                                >
+                                    Save
+                                </button>
+                              )
+                        }
                     </div>
                     <div className='flex justify-between items-center gap-2 w-full'>
                         {destination && (
@@ -102,8 +107,8 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
                             <button
                                 type='button'
                                 onClick={(e) => {
-                                    e.stopPropagation()
-                                    deletePin(_id)
+                                  e.stopPropagation()
+                                  deletePin(_id)
                                 }}
                                 className='bg-white p-2 opacity-70 hover:opacity-100 font-bold text-dark text-base rounded-3xl hover:shadow-md outline-none'
                             >
@@ -115,7 +120,7 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
             )}
         </div>
         <Link to={`/user-profile/${postedBy?._id}`} className="flex gap-2 mt-2 items-center">
-            <img 
+            <img
                 className='w-8 h-8 rounded-full object-cover'
                 src={postedBy?.image}
                 alt="user-profile"
@@ -124,6 +129,10 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
         </Link>
     </div>
   )
+}
+
+Pin.propTypes = {
+  pin: PropTypes.object
 }
 
 export default Pin

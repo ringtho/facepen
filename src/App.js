@@ -4,13 +4,13 @@ import Login from './components/Login'
 import Home from './pages/Home'
 import { fetchUser } from './utils/fetchUser'
 
-function App() {
+function App () {
   const navigate = useNavigate()
 
   useEffect(() => {
     const user = fetchUser()
-    if(!user) navigate('/login')
-  },[])
+    if (!user) navigate('/login')
+  }, [])
   return (
     <Routes>
       <Route path='login' element={<Login />}></Route>

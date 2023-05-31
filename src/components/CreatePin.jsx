@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { client } from '../client'
 import Spinner from './Spinner'
 import { categories } from '../utils/data'
+import PropTypes from 'prop-types'
 
 const CreatePin = ({ user }) => {
   const [title, setTitle] = useState('')
@@ -25,11 +26,11 @@ const CreatePin = ({ user }) => {
       setWrongImageType(false)
       setLoading(true)
       client.assets
-      .upload('image', e.target.files[0], { contentType: type, filename: name })
-      .then((document) => {
-        setImageAsset(document)
-        setLoading(false)
-      })
+        .upload('image', e.target.files[0], { contentType: type, filename: name })
+        .then((document) => {
+          setImageAsset(document)
+          setLoading(false)
+        })
     } else {
       setWrongImageType(true)
     }
@@ -57,15 +58,15 @@ const CreatePin = ({ user }) => {
         category
       }
       client.create(doc)
-      .then(() => {
-        navigate('/')
-      })
+        .then(() => {
+          navigate('/')
+        })
     } else {
       setFields(true)
       setTimeout(() => setFields(false), 2000)
     }
   }
-  
+
   return (
     <div className='flex flex-col justify-center items-center mt-5 lg:h-4/5'>
       {fields && (
@@ -78,42 +79,46 @@ const CreatePin = ({ user }) => {
           <div className='flex justify-center items-center flex-col border-2 border-dotted border-gray-300 p-3 w-full h-420'>
             {loading && <Spinner />}
             {wrongImageType && <p>Wrong image type</p>}
-            {!imageAsset ? (
-              <label>
-                <div className='flex flex-col items-center justify-center h-full'>
-                  <div className='flex flex-col justify-center items-center'>
-                    <p className='font-bold text-2xl'>
-                      <AiOutlineCloudUpload />
-                    </p>
-                    <p className='text-lg'>Click to upload</p>
-                  </div>
-                  <p className='mt-32 text-gray-400'>
-                    Use high-quality JPG, SVG, PNG, GIF less than 20MB
-                  </p>
-                </div>
-                <input 
-                  type='file'
-                  name='upload-image'
-                  onChange={uploadImage}
-                  className='w-0 h-0'
-                />
-              </label>
-            ):(
-              <div className='relative h-full'>
-                <img 
-                  src={imageAsset?.url}
-                  alt='uploaded-pic'
-                  className='h-full w-full'
-                />
-                <button
-                  type='button'
-                  className='absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer ouyline-none hover:shadow-md transition-all duration-500 ease-in-out'
-                  onClick={() => setImageAsset(null )}
-                >
-                  <MdDelete />
-                </button>
-              </div>
-            )}
+            {
+              !imageAsset
+                ? (
+                    <label>
+                      <div className='flex flex-col items-center justify-center h-full'>
+                        <div className='flex flex-col justify-center items-center'>
+                          <p className='font-bold text-2xl'>
+                            <AiOutlineCloudUpload />
+                          </p>
+                          <p className='text-lg'>Click to upload</p>
+                        </div>
+                        <p className='mt-32 text-gray-400'>
+                          Use high-quality JPG, SVG, PNG, GIF less than 20MB
+                        </p>
+                      </div>
+                      <input
+                        type='file'
+                        name='upload-image'
+                        onChange={uploadImage}
+                        className='w-0 h-0'
+                      />
+                    </label>
+                  )
+                : (
+                    <div className='relative h-full'>
+                      <img
+                        src={imageAsset?.url}
+                        alt='uploaded-pic'
+                        className='h-full w-full'
+                      />
+                      <button
+                        type='button'
+                        className='absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer ouyline-none hover:shadow-md transition-all duration-500 ease-in-out'
+                        onClick={() => setImageAsset(null)}
+                      >
+                        <MdDelete />
+                      </button>
+                    </div>
+                  )
+            }
           </div>
         </div>
 
@@ -127,13 +132,13 @@ const CreatePin = ({ user }) => {
             />
             {user && (
               <div className='flex gap-2 my-2 items-center bg-white rounded-lg'>
-                <img 
+                <img
                   src={user.image}
                   className='w-10 h-10 rounded-full'
                   alt='user-profile'
                 />
                 <p className='font-bold'>{user.userName}</p>
-              </div> 
+              </div>
             )}
             <input
               type='text'
@@ -158,8 +163,8 @@ const CreatePin = ({ user }) => {
                 >
                   <option value='other' className='bg-white'>Select Category</option>
                   {categories.map((category, idx) => (
-                    <option 
-                     value={category.name} 
+                    <option
+                     value={category.name}
                      key={idx}
                      className='text-base border-0 outline-0 capitalize bg-white text-black'
                     >
@@ -171,7 +176,7 @@ const CreatePin = ({ user }) => {
               <div
                 className='flex justify-end items-end mt-5'
               >
-                <button 
+                <button
                   type='button'
                   onClick={savePin}
                   className='bg-red-500 text-white font-bold p-2 rounded-full w-28 outline-none'
@@ -186,5 +191,8 @@ const CreatePin = ({ user }) => {
   )
 }
 
+CreatePin.propTypes = {
+  user: PropTypes.object
+}
+
 export default CreatePin
- 

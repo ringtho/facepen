@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { Navbar, CreatePin, Feed, Search, PinDetail } from '../components/index'
+import {
+  Navbar,
+  CreatePin,
+  Feed,
+  Search,
+  PinDetail
+} from '../components/index'
+import PropTypes from 'prop-types'
 
 const Pins = ({ user }) => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -20,6 +27,10 @@ const Pins = ({ user }) => {
       </div>
     </div>
   )
+}
+
+Pins.propTypes = {
+  user: PropTypes.object
 }
 
 export default Pins
